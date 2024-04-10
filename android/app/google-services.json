@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "677056697761",
+    "firebase_url": "https://diet-tracker10-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "diet-tracker10",
+    "storage_bucket": "diet-tracker10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677056697761:android:df1484750c70e1226767e0",
+        "android_client_info": {
+          "package_name": "com.example.beslenme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6Z2sAUkkdf6zV-FuVmb_kc7_cY7g3-hQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

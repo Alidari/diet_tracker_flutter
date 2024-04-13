@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
+import 'package:beslenme/Pages/screens/Onemli.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -179,32 +180,50 @@ class _HomePageState extends State<HomePage> {
                           HomeOptions(
                               imagePath: "assets/dietisyen.png",
                               title: "Diyetisyenlerimiz",
-                              subText: "Diyetisyen Seç"
+                              subText: "Diyetisyen Seç",
+                               onTap: (){} 
                           ),
-                          HomeOptions(
+                         HomeOptions(
                               imagePath: "assets/bmi.png",
-                              title: "Vücut Kitle İndeksi",
-                              subText: "Hesapla"
-                          ),
+                                title: "Vücut Kitle İndeksi",
+                                subText: "Hesapla",
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => VucutKitleIndeksi()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin
+                                  );
+  },
+),
                           HomeOptions(
                               imagePath: "assets/list.png",
                               title: "Diyet Listem",
-                              subText: "Görüntüle"
+                              subText: "Görüntüle",
+                              onTap: (){
+                                
+                              }
                           ),
                           HomeOptions(
                               imagePath: "assets/quiz.png",
                               title: "Günlük Quiz",
-                              subText: "Cevapla"
+                              subText: "Cevapla",
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HomeScreen()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin
+                                );
+                              }
                           ),
                           HomeOptions(
                               imagePath: "assets/food.png",
                               title: "Besin Bilgileri",
-                              subText: "Görüntüle"
+                              subText: "Görüntüle",
+                               onTap: (){}
                           ),
                           HomeOptions(
                               imagePath: "assets/food.png",
                               title: "Mesajlarım",
-                              subText: "Görüntüle"
+                              subText: "Görüntüle",
+                               onTap: (){}
                           ),
 
                         ],

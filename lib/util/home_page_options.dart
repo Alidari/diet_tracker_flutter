@@ -5,12 +5,14 @@ class HomeOptions extends StatelessWidget {
   final String imagePath;
   final String title;
   final String subText;
+  final Function()? onTap;
 
   HomeOptions({
     required this.imagePath,
     required this.title,
-    required this.subText});
-
+    required this.subText,
+    required this.onTap});
+    
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,7 +31,7 @@ class HomeOptions extends StatelessWidget {
             SizedBox(height: 15,),
             GestureDetector(
 
-                onTap: (){},
+                onTap: onTap,
                 child: Container(
 
                   decoration: BoxDecoration(color: Colors.green[300],borderRadius: BorderRadius.circular(12)),

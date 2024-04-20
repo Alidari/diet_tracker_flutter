@@ -99,10 +99,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
             _correctController.forward();
 
             _correctController.forward().then((value) => {
-              _correctController.reverse().then((value) => {
-                nextQuestion()
-              })
-            });
+  _correctController.reverse().then((value) => {
+    setState(() {
+      correctAnimEnabled = false; // Doğru animasyon tamamlandığında correctAnimEnabled değerini false olarak ayarla
+    }),
+    nextQuestion(),
+  })
+});
 
             trueScore++;
             return;
@@ -114,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
         wrongAnimEnabled = true;
         _wrongController.forward().then((value) => {
           _wrongController.reverse().then((value) => {
+            nextQuestion(),
             wrongAnimEnabled = false
           })
         });
@@ -156,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
               SizedBox(height: 50,),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 300.0),
+                padding: const EdgeInsets.symmetric(horizontal: 150.0),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -220,12 +224,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
         ],
       ),
 
-    floatingActionButton: Padding(
+   /* floatingActionButton: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: NextButton(
         nextQuestion: nextQuestion,
       ),
-    ),
+    ),*/
     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

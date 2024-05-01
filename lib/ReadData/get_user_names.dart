@@ -13,25 +13,25 @@ class GetUserName extends StatelessWidget {
   Widget build(BuildContext context) {
 
     //get the collection
-
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-    final ref = FirebaseDatabase.instance.ref();
+    final ref = FirebaseDatabase.instance.ref("users");
 
     return FutureBuilder(
-        future: ref.child("users/$documentId").get(),
-        builder: ((context,snapshot) {
-          if(snapshot.connectionState == ConnectionState.done) {
+      future: ref.child("/$documentId").get(),
+      builder: ((context,snapshot) {
+        if(snapshot.connectionState == ConnectionState.done) {
+          if(snapshot.hasData) {
             Map user = snapshot.data!.value as Map;
-            if(user[feature] != null) {
-            return Text(user[feature].toString());
-            }
-            else{
-              return Text("Bilinmiyor");
+            if (user[feature] != null) {
+              return Text(user[feature].toString());
             }
           }
-            return Text("Yükleniyor...");
+          else{
+            return Text("Bilinmiyor");
           }
-        ),
+        }
+        return Text("Yükleniyor...");
+      }
+      ),
     );
 
   }

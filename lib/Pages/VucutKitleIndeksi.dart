@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 
@@ -52,11 +54,22 @@ class _BMICalculatorState extends State<BMICalculator> {
   String bmiResultClassification = "";
   Color? bmiColor = Colors.black;
 
-  void calculateBMI() {
-    double weight = double.parse(weightController.text);
-    double height = double.parse(heightController.text) / 100.0; // Convert height from cm to m
-    double bmi = weight / (height * height);
+  final user = FirebaseAuth.instance.currentUser!;
+  final ref = FirebaseDatabase.instance.ref("users");
+  late String userId;
 
+  bool saveButtonActive = false;
+
+  void calculateBMI() {
+    if(weightController.text.contains(',') || heightController.text.contains(',')){
+      weightController.text = weightController.text.replaceAll(',', ".");
+      heightController.text.replaceAll(',', '.');
+    }
+  try {
+    double weight = double.parse(weightController.text);
+    double height = double.parse(heightController.text) /
+        100.0; // Convert height from cm to m
+    double bmi = weight / (height * height);
     if(bmi < 18.5){
       bmiResultClassification = " (Çok Zayıf)";
       bmiColor = Colors.lightBlue;
@@ -83,8 +96,75 @@ class _BMICalculatorState extends State<BMICalculator> {
     }
     setState(() {
       bmiResult = bmi;
-
+      saveButtonActive = true;
     });
+  }
+    catch(e){
+      print(e);
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+
+            return AlertDialog(
+              title: Text("Hesaplama Başarısız"),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Tamam"))
+              ],
+            );
+          });
+    }
+  }
+
+
+  void saveBmi () async{
+    try {
+      double weight = double.parse(weightController.text);
+      double height = double.parse(heightController.text);
+      double bmi2 = double.parse(bmiResult.toStringAsFixed(2));
+      userId = user.uid;
+      final refUser = ref.child(userId);
+
+      await refUser.update({
+        "bmi": bmi2,
+        "bmi tipi" : bmiResultClassification,
+        "kilo": weight,
+        "boy" : height
+      });
+
+      showDialog(context: context, builder: (context) {
+        return AlertDialog(
+          content: Text("Kaydetme İşlemi Başarılı",style: TextStyle(
+            color: Colors.green,
+          ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      });
+
+    }
+    catch(e){
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+
+            return AlertDialog(
+              title: Text("Kaydetme Başarısız"),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Tamam"))
+              ],
+            );
+          });
+    }
   }
 
 
@@ -101,7 +181,7 @@ class _BMICalculatorState extends State<BMICalculator> {
 
             Container(
               decoration: BoxDecoration(
-                color: Colors.amber,
+                color: Colors.amber[200],
                   border: Border.all(color: Colors.black45,width: 1),
                   borderRadius: BorderRadius.circular(12)
               ),
@@ -111,7 +191,7 @@ class _BMICalculatorState extends State<BMICalculator> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
 
-                  labelText: 'Weight (kg)',
+                  labelText: 'Kilo (kg)',
 
                 ),
               ),
@@ -119,7 +199,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.amber[200],
                   border: Border.all(color: Colors.black45,width: 1),
                   borderRadius: BorderRadius.circular(12)
               ),
@@ -128,23 +208,43 @@ class _BMICalculatorState extends State<BMICalculator> {
                 controller: heightController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: 'Height (cm)',
+                  labelText: 'Boy (cm)',
                 ),
               ),
             ),
             SizedBox(height: 16),
-           ElevatedButton(
-            onPressed: calculateBMI,
-            style: ElevatedButton.styleFrom(
-              backgroundColor:  Colors.green[900], // Koyu yeşil arka plan
-            ),
-            child: Text(
-              'Hesapla',
-              style: TextStyle(
-                color: Colors.white, // Beyaz yazı
-              ),
-            ),
-          ),
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 108.0,vertical: 30),
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               children: [
+                 ElevatedButton(
+                  onPressed: calculateBMI,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:  Colors.green[900], // Koyu yeşil arka plan
+                  ),
+                  child: Text(
+                    'Hesapla',
+                    style: TextStyle(
+                      color: Colors.white, // Beyaz yazı
+                    ),
+                  ),
+                           ),
+                 ElevatedButton(
+                   onPressed: saveButtonActive ? saveBmi : null,
+                   style: ElevatedButton.styleFrom(
+                     backgroundColor:  Colors.green[500], // Koyu yeşil arka plan
+                   ),
+                   child: Text(
+                     'Kaydet',
+                     style: TextStyle(
+                       color: Colors.white, // Beyaz yazı
+                     ),
+                   ),
+                 ),
+               ],
+             ),
+           ),
             SizedBox(height: 16),
             Text(
               'BMI: ${bmiResult.toStringAsFixed(1)  + bmiResultClassification}',

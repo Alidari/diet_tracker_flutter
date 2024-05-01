@@ -19,14 +19,12 @@ class _LoginPageState extends State<LoginPage> {
   final password_controller = TextEditingController();
 
   Future signIn() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        });
     try {
-
-      showDialog(
-          context: context,
-          builder: (context) {
-            return Center(child: CircularProgressIndicator());
-          });
-
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email_conttroller.text.trim(),
           password: password_controller.text.trim());
@@ -35,6 +33,24 @@ class _LoginPageState extends State<LoginPage> {
 
     } catch (e) {
       print("Giriş Başarısız : {$e}");
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+
+            return AlertDialog(
+              title: Text("Giriş Yapılamadı"),
+              content: Text("Eposta ve Şifre Uyumsuz"),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Tamam"))
+              ],
+            );
+          });
+
     }
   }
 

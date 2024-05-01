@@ -1,3 +1,4 @@
+import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/ReadData/get_user_names.dart';
 import 'package:beslenme/util/home_page_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -181,7 +182,12 @@ class _HomePageState extends State<HomePage> {
                               imagePath: "assets/dietisyen.png",
                               title: "Diyetisyenlerimiz",
                               subText: "Diyetisyen Seç",
-                               onTap: (){} 
+                               onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => diyetisyenSec()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                );
+                              }
                           ),
                          HomeOptions(
                               imagePath: "assets/bmi.png",
@@ -192,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                                     context,
                                     MaterialPageRoute(builder: (context) => VucutKitleIndeksi()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin
                                   );
-  },
+                          },
 ),
                           HomeOptions(
                               imagePath: "assets/list.png",

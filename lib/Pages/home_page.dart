@@ -1,5 +1,9 @@
+import 'dart:html';
+import 'dart:ui';
+
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/ReadData/get_user_names.dart';
+import 'package:beslenme/util/background_painter.dart';
 import 'package:beslenme/util/home_page_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
 import 'package:beslenme/Pages/screens/Onemli.dart';
+import 'package:google_fonts/google_fonts.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -23,40 +28,26 @@ class _HomePageState extends State<HomePage> {
     docId = user.uid;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey[200],
         leading: Icon(Icons.menu),
        actions: [
-         /*Padding(
-           padding: const EdgeInsets.only(right: 20.0),
-           child: Icon(Icons.person),
-         ),*/
          GestureDetector(
              onTap: (){
                FirebaseAuth.instance.signOut();
              },
              child: Icon(Icons.logout)),
        ],
-       /* backgroundColor: Colors.green,
-        title:  Text(
-          user.email!,style: TextStyle(fontSize: 16),textAlign: TextAlign.center,
-        ),
-        actions: [
-          GestureDetector(
-              onTap: (){
-                FirebaseAuth.instance.signOut();
-              },
-              child: Icon(Icons.logout)),
-
-        ],
-      */),
+      ),
       bottomNavigationBar: BottomNavigationBar(items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -72,341 +63,409 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        decoration: BoxDecoration(
+
+         /* gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white,Colors.amber.withOpacity(0.1)]
+          )*/
+        ),
+        child: ListView(
           children: [
-            Expanded(child: FutureBuilder(
-              future: getDocId(),
-              builder: (context,snapshot){
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+            Expanded(
+              child: FutureBuilder(
+                future: getDocId(),
+                builder: (context,snapshot){
+                  return Center(
+                      child: Column(
+                        children: [
 
-                      CircleAvatar(
-                        backgroundColor: Colors.green[50],
-                        radius: 50,
-                        child: Icon(
-                          Icons.face,
-                          size: 70,
-                        ),
-                      ),
+                          SizedBox(height: 50,),
 
-                      SizedBox(
-                        height: 50,
-                      ),
-
-
-                      Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(12),
+                          //PROFİL CONTAİNER
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 250.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
+                                    margin: EdgeInsets.all(35),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage("assets/profil.jpg"),
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      GetUserName(documentId: docId, feature: "name"),
+                                      Text(" "),
+                                      GetUserName(documentId: docId, feature: "lastname")
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+
+                          //BAŞKA SEKMELER
+
+                          //Kilo, boy, bmi bilgileri
+                          Stack(
                             children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("İsim: ",style: TextStyle(fontWeight: FontWeight.bold)),
-                                      GetUserName(documentId: docId,feature: "name"),
-                                    ],
-                                  ),
-
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Kilo: ",style: TextStyle(fontWeight: FontWeight.bold),),
-                                      GetUserName(documentId: docId,feature: "weight"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-
-
-
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Soy İsim: ",style: TextStyle(fontWeight: FontWeight.bold)),
-                                      GetUserName(documentId: docId,feature: "lastname"),
-                                    ],
-                                  ),
-
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Yaş: ",style: TextStyle(fontWeight: FontWeight.bold)),
-                                      GetUserName(documentId: docId,feature: "age"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: 70,
-                      ),
-
-
-
-                      //----------BUTONLAR---------------
-
-                      Expanded(
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                        children: [
-                          HomeOptions(
-                              imagePath: "assets/dietisyen.png",
-                              title: "Diyetisyenlerimiz",
-                              subText: "Diyetisyen Seç",
-                               onTap: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => diyetisyenSec()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
-                                );
-                              }
-                          ),
-                         HomeOptions(
-                              imagePath: "assets/bmi.png",
-                                title: "Vücut Kitle İndeksi",
-                                subText: "Hesapla",
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => VucutKitleIndeksi()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin
-                                  );
-                          },
-),
-                          HomeOptions(
-                              imagePath: "assets/list.png",
-                              title: "Diyet Listem",
-                              subText: "Görüntüle",
-                              onTap: (){
-                                
-                              }
-                          ),
-                          HomeOptions(
-                              imagePath: "assets/quiz.png",
-                              title: "Günlük Quiz",
-                              subText: "Cevapla",
-                              onTap: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => HomeScreen()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin
-                                );
-                              }
-                          ),
-                          HomeOptions(
-                              imagePath: "assets/food.png",
-                              title: "Besin Bilgileri",
-                              subText: "Görüntüle",
-                               onTap: (){}
-                          ),
-                          HomeOptions(
-                              imagePath: "assets/food.png",
-                              title: "Mesajlarım",
-                              subText: "Görüntüle",
-                               onTap: (){}
-                          ),
-
-                        ],
-                      ))
-
-
-
-/*
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            children:  [
-
-                              // Diyet Listelerim
-                              GestureDetector(
-                                onTap: (){},
-                                child: Container(
-                                    width: 180,
-                                    padding: EdgeInsets.symmetric(horizontal: 30,vertical: 50),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12)),
-                                    child: Center(
-                                      child: Text(
-                                        "Diyet Listelerim",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
+                              // İlk container
+                              Container(
+                                  width: screenWidth,
+                                  height: screenHeight,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.center,
+                                          colors: [Colors.green.withOpacity(1), Colors.white]
                                       ),
-                                    )),
-                              ),
+                                      color: Colors.green.withOpacity(0.6),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(50),
+                                          topRight: Radius.circular(50)
+                                      )
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top:35.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                width: 110,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.green[100],
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(color: Colors.white.withOpacity(0.5),width: 1)
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                      GetUserName(documentId: docId, feature: "kilo",),
+                                                      Text(" Kg")],
+                                                    ),
 
-                              SizedBox(
-                                height: 20,
-                              ),
-                              // Besin Bilgilerim
-                              GestureDetector(
-                                onTap: (){},
-                                child: Container(
-                                    width: 180,
-                                    padding: EdgeInsets.symmetric(horizontal: 30,vertical: 50),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12)),
-                                    child: Center(
-                                      child: Text(
-                                        "Besin Bilgilerim",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
+                                                    Row(
+
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: Text("Kilo",style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              color: Colors.black.withOpacity(0.4)
+                                                          )
+                                                            ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+
+                                              Container(
+                                                width: 110,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.green[100],
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(color: Colors.white.withOpacity(0.5),width: 1)
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        GetUserName(documentId: docId, feature: "boy",),
+                                                        Text(" Cm")],
+                                                    ),
+
+                                                    Row(
+
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: Text("Boy",style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              color: Colors.black.withOpacity(0.4)
+                                                          )
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+
+
+                                              Container(
+                                                width: 110,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.green[100],
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(color: Colors.white.withOpacity(0.5),width: 1)
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        GetUserName(documentId: docId, feature: "bmi",)],
+                                                    ),
+
+                                                    Row(
+
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: Text("Bmi",style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              color: Colors.black.withOpacity(0.4)
+                                                          )
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    )),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-
-                              //Diyetisyenlerimiz
-                              GestureDetector(
-                                onTap: (){},
-                                child: Container(
-                                    width: 180,
-                                    padding: EdgeInsets.symmetric(horizontal: 27,vertical: 50),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12)),
-                                    child: Center(
-                                      child: Text(
-                                        "Diyetisyenlerimiz",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    )),
-                              ),
-
-                            ],
-                          ),
-
-                          Column(
-                            children:  [
-
-                              // Diyet Listelerim
-                              GestureDetector(
-                                onTap: (){},
-                                child: Container(
-                                  width: 180,
-                                    padding: EdgeInsets.symmetric(vertical: 50),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12),
-
+                                      ],
                                     ),
-
-                                    child: Center(
-                                      child: Text(
-                                        "Mesajlar",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    )),
+                                  )
+                                // İlk container içeriği burada olabilir
                               ),
 
-                              SizedBox(
-                                height: 20,
-                              ),
-                              // Besin Bilgilerim
-                              GestureDetector(
-                                onTap: (){},
+                              // İkinci container
+                              Positioned(
+                                top: 150, // İlk container'ın üst kısmından bu kadar mesafede olacak
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
                                 child: Container(
-                                    width: 180,
-                                    padding: EdgeInsets.symmetric(horizontal: 30,vertical: 50),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12)),
-                                    child: Center(
-                                      child: Text(
-                                        "Besin Bilgilerim",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
+                                  height: screenHeight - 150, // İlk container'ın üzerine binmeyecek şekilde ayarlanır
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(50),
+                                        topRight: Radius.circular(50),
+                                      )
+                                  ),
+
+                                  
+                                  //BUTONLAR
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+
+                                          GestureDetector(
+                                            onTap: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => diyetisyenSec()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                              );
+                                            },
+                                            child : Container(
+
+                                              child: Column(
+                                                children: [
+                                                  Image.asset("assets/dietisyen.png",width: 150,),
+                                                  Text("Diyetisyen",
+                                                    style: GoogleFonts.roboto(
+                                                        fontWeight : FontWeight.bold,
+                                                        fontSize : 18,
+                                                        color : Colors.black.withOpacity(0.7)
+
+                                                    ),)
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 55,),
+
+                                          GestureDetector(
+                                            onTap: (){},
+                                            child : Container(
+
+                                              child: Column(
+                                                children: [
+                                                  Image.asset("assets/food.png",width: 100,),
+                                                  SizedBox(height: 10,),
+                                                  Text("Besin Bilgileri",
+                                                    style: GoogleFonts.roboto(
+                                                        fontWeight : FontWeight.bold,
+                                                        fontSize : 18,
+                                                        color : Colors.black.withOpacity(0.7)
+
+                                                    ),)
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 40,),
+                                          GestureDetector(
+                                            onTap: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => VucutKitleIndeksi()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                              );
+                                            },
+                                            child : Container(
+
+                                              child: Column(
+                                                children: [
+                                                  Image.asset("assets/bmi.png",width: 150,),
+                                                  Text("Bmi Hesaplama",
+                                                    style: GoogleFonts.roboto(
+                                                        fontWeight : FontWeight.bold,
+                                                        fontSize : 18,
+                                                        color : Colors.black.withOpacity(0.7)
+
+                                                    ),)
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+
+
+
+                                        ],
                                       ),
-                                    )),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
 
-                              //Diyetisyenlerimiz
-                              GestureDetector(
-                                onTap: (){},
+                                      Column(
+                                        children: [
+                                          SizedBox(height: 15,),
+                                          GestureDetector(
+                                            onTap: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => HomeScreen()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                              );
+                                            },
+                                            child : Container(
+                                              child: Column(
+                                                children: [
 
-                                child: Container(
-                                    width: 180,
-                                    padding: EdgeInsets.symmetric(horizontal: 27,vertical: 50),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12)),
+                                                  Image.asset("assets/quiz.png",width: 125,),
+                                                  SizedBox(height: 10,),
+                                                  Text("Quiz Oyunu",
+                                                    style: GoogleFonts.roboto(
+                                                        fontWeight : FontWeight.bold,
+                                                        fontSize : 18,
+                                                        color : Colors.black.withOpacity(0.7)
 
-                                    child: Center(
-                                      child: Text(
-                                        "Diyetisyenlerimiz",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+                                          SizedBox(height: 45,),
+                                          GestureDetector(
+                                            onTap: (){},
+                                            child : Container(
+                                              child: Column(
+                                                children: [
+
+                                                  Image.asset("assets/message.png",width: 110,),
+                                                  SizedBox(height: 10,),
+                                                  Text("Mesajlar",
+                                                    style: GoogleFonts.roboto(
+                                                        fontWeight : FontWeight.bold,
+                                                        fontSize : 18,
+                                                        color : Colors.black.withOpacity(0.7)
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 55,),
+                                          GestureDetector(
+                                            onTap: (){},
+                                            child : Container(
+                                              child: Column(
+                                                children: [
+
+                                                  Image.asset("assets/list.png",width: 110,),
+                                                  SizedBox(height: 10,),
+                                                  Text("Diyet Listesi",
+                                                    style: GoogleFonts.roboto(
+                                                        fontWeight : FontWeight.bold,
+                                                        fontSize : 18,
+                                                        color : Colors.black.withOpacity(0.7)
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+
+
+                                        ],
                                       ),
-                                    ),
 
+
+                                    ],
+                                  ),
+                                  // İkinci container içeriği burada olabilir
                                 ),
-
-
                               ),
-
                             ],
                           )
 
+
                         ],
-                      )*/
+                      )
+                  );
+                },
+              )
 
-                    ],
-                  ),
-                );
-              },
 
-            )
-            )
-          ],
+            ),
+          ]
         ),
-      ),
+      )
     );
   }
 }

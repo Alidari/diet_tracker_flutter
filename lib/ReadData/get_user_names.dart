@@ -22,7 +22,12 @@ class GetUserName extends StatelessWidget {
           if(snapshot.hasData) {
             Map user = snapshot.data!.value as Map;
             if (user[feature] != null) {
-              return Text(user[feature].toString());
+              return Text(user[feature].toString(), style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black.withOpacity(0.7),
+                fontSize: 25,
+                fontFamily: "Arial"
+              ),);
             }
           }
           else{

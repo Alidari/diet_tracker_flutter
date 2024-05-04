@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../constants.dart';
 class QuestionWidget extends StatelessWidget {
   const QuestionWidget({
@@ -26,7 +27,11 @@ class QuestionWidget extends StatelessWidget {
         const SizedBox(height: 25.0),
         Container(
           alignment: Alignment.centerLeft,
-          child: Text('Question ${indexAction + 1}/$totalQuestions: $question', style: const TextStyle(fontSize: 24.0, color: neutral)),
+          child: Text(
+              textAlign: TextAlign.center,
+              'Question ${indexAction + 1}/$totalQuestions: $question',
+              style: GoogleFonts.aBeeZee(fontSize: 20.0, color: neutralText,),
+          ),
         ),
       ],
     );

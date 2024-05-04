@@ -92,7 +92,7 @@ class _diyetisyenSecState extends State<diyetisyenSec> {
             children: [
               Divider(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
                     Padding(
@@ -150,11 +150,13 @@ class _diyetisyenSecState extends State<diyetisyenSec> {
 
                             children: [
                               DiyetisYenAl(userId: userId,kosul: "mevcut",onTap: diyetisyenGoruntule),
+                              SizedBox(height: 20,),
                               Text("Yeni Diyetisyenler Ekle",
                                 style: GoogleFonts.caveat(
                                   fontSize : 24
                                 )
                               ),
+                              SizedBox(height: 20,),
                               DiyetisYenAl(userId: userId,kosul: "mevcut degil",onTap: diyetisyenEkle),
                             ],
                           ),

@@ -1,10 +1,8 @@
-import 'dart:html';
 import 'dart:ui';
 
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
+import 'package:beslenme/Pages/messages.dart';
 import 'package:beslenme/ReadData/get_user_names.dart';
-import 'package:beslenme/util/background_painter.dart';
-import 'package:beslenme/util/home_page_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
 import 'package:beslenme/Pages/screens/Onemli.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'foodInfo.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -65,12 +65,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-
-         /* gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomCenter,
-            colors: [Colors.white,Colors.amber.withOpacity(0.1)]
-          )*/
         ),
         child: ListView(
           children: [
@@ -87,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                           //PROFİL CONTAİNER
                           Container(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 250.0),
+                              padding: const EdgeInsets.only(right: 120.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -105,9 +99,19 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Row(
                                     children: [
-                                      GetUserName(documentId: docId, feature: "name"),
+                                      GetUserName(documentId: docId, feature: "name",styl: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black.withOpacity(0.7),
+                                          fontSize: 25,
+                                          fontFamily: "Arial"
+                                      ),),
                                       Text(" "),
-                                      GetUserName(documentId: docId, feature: "lastname")
+                                      GetUserName(documentId: docId, feature: "lastname",styl: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black.withOpacity(0.7),
+                                          fontSize: 25,
+                                          fontFamily: "Arial"
+                                      ),)
                                     ],
                                   )
                                 ],
@@ -148,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Container(
-                                                width: 110,
+                                                width: screenWidth/5,
                                                 height: 80,
                                                 decoration: BoxDecoration(
                                                     color: Colors.green[100],
@@ -161,7 +165,12 @@ class _HomePageState extends State<HomePage> {
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                      GetUserName(documentId: docId, feature: "kilo",),
+                                                      GetUserName(documentId: docId, feature: "kilo",styl: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.black.withOpacity(0.7),
+                                                          fontSize: 20,
+                                                          fontFamily: "Arial"
+                                                      ),),
                                                       Text(" Kg")],
                                                     ),
 
@@ -171,6 +180,7 @@ class _HomePageState extends State<HomePage> {
                                                         Padding(
                                                           padding: const EdgeInsets.only(left: 20.0),
                                                           child: Text("Kilo",style: TextStyle(
+                                                              fontSize: 15,
                                                               fontWeight: FontWeight.bold,
                                                               color: Colors.black.withOpacity(0.4)
                                                           )
@@ -183,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
 
                                               Container(
-                                                width: 110,
+                                                width: screenWidth/5,
                                                 height: 80,
                                                 decoration: BoxDecoration(
                                                     color: Colors.green[100],
@@ -196,7 +206,12 @@ class _HomePageState extends State<HomePage> {
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                        GetUserName(documentId: docId, feature: "boy",),
+                                                        GetUserName(documentId: docId, feature: "boy",styl: TextStyle(
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.black.withOpacity(0.7),
+                                                            fontSize: 20,
+                                                            fontFamily: "Arial"
+                                                        ),),
                                                         Text(" Cm")],
                                                     ),
 
@@ -219,7 +234,7 @@ class _HomePageState extends State<HomePage> {
 
 
                                               Container(
-                                                width: 110,
+                                                width: screenWidth/5,
                                                 height: 80,
                                                 decoration: BoxDecoration(
                                                     color: Colors.green[100],
@@ -232,7 +247,13 @@ class _HomePageState extends State<HomePage> {
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                        GetUserName(documentId: docId, feature: "bmi",)],
+                                                        GetUserName(documentId: docId, feature: "bmi",styl: TextStyle(
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.black.withOpacity(0.7),
+                                                            fontSize: 20,
+                                                            fontFamily: "Arial"
+                                                        ),)
+                                                      ],
                                                     ),
 
                                                     Row(
@@ -295,7 +316,7 @@ class _HomePageState extends State<HomePage> {
 
                                               child: Column(
                                                 children: [
-                                                  Image.asset("assets/dietisyen.png",width: 150,),
+                                                  Image.asset("assets/dietisyen.png",width: 100,),
                                                   Text("Diyetisyen",
                                                     style: GoogleFonts.roboto(
                                                         fontWeight : FontWeight.bold,
@@ -312,12 +333,17 @@ class _HomePageState extends State<HomePage> {
                                           SizedBox(height: 55,),
 
                                           GestureDetector(
-                                            onTap: (){},
+                                            onTap: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => FoodsInfo()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                              );
+                                            },
                                             child : Container(
 
                                               child: Column(
                                                 children: [
-                                                  Image.asset("assets/food.png",width: 100,),
+                                                  Image.asset("assets/food.png",width: 80,),
                                                   SizedBox(height: 10,),
                                                   Text("Besin Bilgileri",
                                                     style: GoogleFonts.roboto(
@@ -344,7 +370,7 @@ class _HomePageState extends State<HomePage> {
 
                                               child: Column(
                                                 children: [
-                                                  Image.asset("assets/bmi.png",width: 150,),
+                                                  Image.asset("assets/bmi.png",width: 100,),
                                                   Text("Bmi Hesaplama",
                                                     style: GoogleFonts.roboto(
                                                         fontWeight : FontWeight.bold,
@@ -357,8 +383,6 @@ class _HomePageState extends State<HomePage> {
 
                                             ),
                                           ),
-
-
 
                                         ],
                                       ),
@@ -377,7 +401,7 @@ class _HomePageState extends State<HomePage> {
                                               child: Column(
                                                 children: [
 
-                                                  Image.asset("assets/quiz.png",width: 125,),
+                                                  Image.asset("assets/quiz.png",width: 75,),
                                                   SizedBox(height: 10,),
                                                   Text("Quiz Oyunu",
                                                     style: GoogleFonts.roboto(
@@ -395,12 +419,17 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           SizedBox(height: 45,),
                                           GestureDetector(
-                                            onTap: (){},
+                                            onTap: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => Messages()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                              );
+                                            },
                                             child : Container(
                                               child: Column(
                                                 children: [
 
-                                                  Image.asset("assets/message.png",width: 110,),
+                                                  Image.asset("assets/message.png",width: 90,),
                                                   SizedBox(height: 10,),
                                                   Text("Mesajlar",
                                                     style: GoogleFonts.roboto(
@@ -417,14 +446,14 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ),
 
-                                          SizedBox(height: 55,),
+                                          SizedBox(height: 40,),
                                           GestureDetector(
                                             onTap: (){},
                                             child : Container(
                                               child: Column(
                                                 children: [
 
-                                                  Image.asset("assets/list.png",width: 110,),
+                                                  Image.asset("assets/list.png",width: 90,),
                                                   SizedBox(height: 10,),
                                                   Text("Diyet Listesi",
                                                     style: GoogleFonts.roboto(

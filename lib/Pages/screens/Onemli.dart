@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../constants.dart';
 import '../models/question.dart';
 import '../widgets/question_widget.dart';
-import '../widgets/next_button.dart';
 import '../widgets/optioncard.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -149,28 +149,50 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
               QuestionWidget(question: _questions[index].title, indexAction: index, totalQuestions: _questions.length,image: _questions[index].image
               ),
               const SizedBox(height: 25.0,),
-              for(int i=0;i<_questions[index].options.length;i++)
-              OptionCard(option: _questions[index].options.keys.toList()[i],
-              color: isPressed ? _questions[index].options.values.toList()[i]==true ?  correct : incorrect : neutral,
-                optionIndex: i,
-                onTap: changeColor,
+
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        for(int i=0;i<_questions[index].options.length-2;i++)
+                        OptionCard(option: _questions[index].options.keys.toList()[i],
+                        color: isPressed ? _questions[index].options.values.toList()[i]==true ?  correct : incorrect : neutralOption,
+                          optionIndex: i,
+                          onTap: changeColor,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        for(int i=2;i<_questions[index].options.length;i++)
+                          OptionCard(option: _questions[index].options.keys.toList()[i],
+                            color: isPressed ? _questions[index].options.values.toList()[i]==true ?  correct : incorrect : neutralOption,
+                            optionIndex: i,
+                            onTap: changeColor,
+                          ),
+                      ],
+                    ),
+
+                  ],
+                ),
               ),
 
 
               SizedBox(height: 50,),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 150.0),
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Column(
                         children: [
-                          Icon(Icons.check,size: 50,color: Colors.green,),
+                          Icon(Icons.check_box_rounded,size: 50,color: Colors.green,),
                           Text("Doğru:" + trueScore.toString(),
-                          style: TextStyle(
-                            fontFamily: "Arial",
+                          style: GoogleFonts.aDLaMDisplay(
                             color: Colors.green,
                             fontSize: 25,
                             fontWeight: FontWeight.w600
@@ -179,9 +201,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       ),
                       Column(
                         children: [
-                          Icon(Icons.close,size: 50,color: Colors.red,),
+                          Icon(Icons.close_rounded,size: 55,color: Colors.red,),
                           Text("Yanlış: " + falseScore.toString(),
-                            style: TextStyle(
+                            style: GoogleFonts.aDLaMDisplay(
                               color: Colors.red,
                               fontSize: 25,
                                 fontWeight: FontWeight.w600)

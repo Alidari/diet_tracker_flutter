@@ -5,8 +5,9 @@ import 'package:firebase_database/firebase_database.dart';
 class GetUserName extends StatelessWidget {
   final String documentId;
   final String feature;
+  final TextStyle styl;
 
-  GetUserName({required this.documentId,required this.feature});
+  GetUserName({required this.documentId,required this.feature,required this.styl});
 
 
   @override
@@ -22,12 +23,8 @@ class GetUserName extends StatelessWidget {
           if(snapshot.hasData) {
             Map user = snapshot.data!.value as Map;
             if (user[feature] != null) {
-              return Text(user[feature].toString(), style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black.withOpacity(0.7),
-                fontSize: 25,
-                fontFamily: "Arial"
-              ),);
+              return Text(user[feature].toString(), style: styl
+              );
             }
           }
           else{

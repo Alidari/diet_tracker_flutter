@@ -17,20 +17,30 @@ class OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        onTap(optionIndex);
-        },
-      child: Card(
+    return Container(
+      height: 35,
+      width: 110,
+      decoration: BoxDecoration(
         color: color,
-        child: ListTile(
-          title: Text(
-            option,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 22.0,color: Colors.white)
-            ,
-          ),
+        borderRadius: BorderRadius.circular(12)
+      ),
+      margin: EdgeInsets.all(10),
+      child: GestureDetector(
+        onTap: (){
+          onTap(optionIndex);
+          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                option,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17.0,color: Colors.white)
+                ,
+              ),
+          ],
         ),
+
       ),
     );
   }

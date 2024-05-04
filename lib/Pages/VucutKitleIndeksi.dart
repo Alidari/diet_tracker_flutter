@@ -120,7 +120,6 @@ class _BMICalculatorState extends State<BMICalculator> {
     }
   }
 
-
   void saveBmi () async{
     try {
       double weight = double.parse(weightController.text);
@@ -180,6 +179,7 @@ class _BMICalculatorState extends State<BMICalculator> {
           children: [
 
             Container(
+              height: 50,
               decoration: BoxDecoration(
                 color: Colors.amber[200],
                   border: Border.all(color: Colors.black45,width: 1),
@@ -198,6 +198,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             ),
             SizedBox(height: 16),
             Container(
+              height: 50,
               decoration: BoxDecoration(
                   color: Colors.amber[200],
                   border: Border.all(color: Colors.black45,width: 1),
@@ -214,7 +215,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             ),
             SizedBox(height: 16),
            Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 108.0,vertical: 30),
+             padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 30),
              child: Row(
                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                children: [
@@ -256,7 +257,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             ),
 
             SizedBox(
-              height: 20,
+              height: 0,
             ),
 
             Padding(

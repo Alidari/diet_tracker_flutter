@@ -41,6 +41,10 @@ dependencies:
   cloud_firestore:
   firebase_database:
   lottie:
+  file_picker: ^4.6.1
+  csv: ^5.0.1
+  path_provider: ^2.0.10
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +89,7 @@ flutter:
     - assets/foodsBackground.jpg
     - assets/foodsBackground.png
     - assets/data.json
+    - assets/dietTracker-1.csv
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

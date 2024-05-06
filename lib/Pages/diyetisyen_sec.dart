@@ -4,7 +4,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'diyetisyen_sayfası.dart';
+
 class diyetisyenSec extends StatefulWidget {
+
   const diyetisyenSec({Key? key}) : super(key: key);
 
   @override
@@ -32,8 +35,11 @@ class _diyetisyenSecState extends State<diyetisyenSec> {
       });
     });
   }
-  void diyetisyenGoruntule(String key){
-    print(key);
+  void diyetisyenGoruntule(Map diyetisyen){
+    Navigator.push(
+        context,
+      MaterialPageRoute(builder: (context) => DiyetisyenSayfa(diyetisyen: diyetisyen,))
+    );
   }
 
   @override
@@ -149,7 +155,7 @@ class _diyetisyenSecState extends State<diyetisyenSec> {
                           child: Column(
 
                             children: [
-                              DiyetisYenAl(userId: userId,kosul: "mevcut",onTap: diyetisyenGoruntule),
+                              DiyetisYenAl(userId: userId,kosul: "mevcut",onTap: diyetisyenGoruntule,onTapMevcutDegil: diyetisyenEkle,),
                               SizedBox(height: 20,),
                               Text("Yeni Diyetisyenler Ekle",
                                 style: GoogleFonts.caveat(
@@ -157,7 +163,7 @@ class _diyetisyenSecState extends State<diyetisyenSec> {
                                 )
                               ),
                               SizedBox(height: 20,),
-                              DiyetisYenAl(userId: userId,kosul: "mevcut degil",onTap: diyetisyenEkle),
+                              DiyetisYenAl(userId: userId,kosul: "mevcut degil",onTap: diyetisyenGoruntule,onTapMevcutDegil: diyetisyenEkle),
                             ],
                           ),
 

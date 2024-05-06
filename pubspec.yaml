@@ -45,6 +45,7 @@ dependencies:
   csv: ^5.0.1
   path_provider: ^2.0.10
   open_file: ^3.2.1
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,8 @@ flutter:
     - assets/foodsBackground.png
     - assets/data.json
     - assets/dietTracker-1.csv
+    - assets/empty-star.svg
+    - assets/star.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

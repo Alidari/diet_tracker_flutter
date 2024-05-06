@@ -13,31 +13,46 @@ class MesajAl extends StatelessWidget {
   Widget build(BuildContext context) {
 
     //get the collection
-    final ref = FirebaseDatabase.instance.ref("mesaj");
+    final ref = FirebaseDatabase.instance.ref("mesaj/$userId/$message_with");
+    
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
 
     return FutureBuilder(
-        future: ref.child("$userId/$message_with").get(),
+        future: ref.get(),
         builder: ((context,snapshot) {
                 if(snapshot.connectionState == ConnectionState.done) {
                   Map messageList = {};
                   Map MessagesData;
+
+
+                  print(snapshot.hasData.toString());
                   if(snapshot.hasData){
                     MessagesData = snapshot.data!.value as Map;
 
+
+
+                    List<MapEntry> entries = MessagesData.entries.toList();
+                    entries.sort((a, b) => (b.value['tarih'] as int).compareTo(a.value['tarih'] as int));
+                    Map<String, Map> sortedMap = {};
+
+                    print("AAAA: " + entries.toString());
+                    for (var entry in entries) {
+                      sortedMap[entry.key] = entry.value;
+                    }
+
+                    MessagesData = sortedMap;
                     MessagesData.forEach((key, value) {
+
                       messageList[key] = value;
                     });
                   }
 
-                  messageList.forEach((key, value) {
-                    print(value["mesaj"]);
-                  });
 
                 if(messageList.isNotEmpty){
                  return ListView.builder(
+                   reverse: true,
                   itemCount: messageList.length,
                    itemBuilder: (BuildContext context, int index) {
                     var values = messageList.values.toList();
@@ -45,6 +60,9 @@ class MesajAl extends StatelessWidget {
                     var alici = values[index]["alici"];
                     var gonderen = values[index]["gonderen"];
                     var tarih = values[index]["tarih"];
+                    var saat = DateTime.fromMillisecondsSinceEpoch(tarih * 1000).hour;
+                    var dakika = DateTime.fromMillisecondsSinceEpoch(tarih * 1000).minute;
+                    var tarihDate = DateTime.fromMillisecondsSinceEpoch(tarih * 1000);
 
                     return Row(
                       mainAxisAlignment: (gonderen == userId) ? MainAxisAlignment.end : MainAxisAlignment.start ,
@@ -60,7 +78,13 @@ class MesajAl extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(7.0),
-                            child: Text(mesaj,style: TextStyle(color: Colors.white.withOpacity(0.9)),),
+                            child: Column(
+                              children: [
+                                Text(mesaj,style: TextStyle(color: Colors.white.withOpacity(0.9)),),
+                                Text(saat.toString() + ":" + dakika.toString(),style: TextStyle(fontSize: 10,color: Colors.white ),textAlign: TextAlign.end,),
+                                Text(tarihDate.toString(),style: TextStyle(fontSize: 10,color: Colors.white ),)
+                              ],
+                            ),
                           ),
                         ),
                       ],

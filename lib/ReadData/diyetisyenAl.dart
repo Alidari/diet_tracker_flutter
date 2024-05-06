@@ -6,9 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 class DiyetisYenAl extends StatelessWidget {
   final String userId;
   final String kosul;
-  final Function(String) onTap;
+  final Function(Map) onTap;
+  final Function (String) onTapMevcutDegil;
 
-  DiyetisYenAl({required this.userId,required this.kosul,required this.onTap});
+  DiyetisYenAl({required this.userId,required this.kosul,required this.onTap,required this.onTapMevcutDegil});
 
   List<dynamic> mevcutDiyetisyenKontrol = [];
 
@@ -123,7 +124,7 @@ class DiyetisYenAl extends StatelessWidget {
                                 height: 10,
                                 padding: EdgeInsets.all(1), // padding ayarı
                                 onPressed: (){
-                                  onTap(mevcutKey[i]);
+                                  onTap(diyetisyenlerMevcut[i]);
                                 },
                                 child: Text("Detay",style: TextStyle(fontSize: 15),),
                                 color: Colors.green,
@@ -186,7 +187,7 @@ class DiyetisYenAl extends StatelessWidget {
                             height: 20,
                             padding: EdgeInsets.all(1),
                             onPressed: (){
-                              onTap(mevcutOlmayanKey[i]);
+                              onTapMevcutDegil(mevcutOlmayanKey[i]);
                             },
                             child: Icon(Icons.add,size: 20,),
                             color: Colors.green,

@@ -1,9 +1,7 @@
 import 'package:beslenme/Pages/widgets/chat_input_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../ReadData/mesajları_al.dart';
 class MessageTab extends StatefulWidget {
@@ -35,20 +33,21 @@ class _MessageWithState extends State<MessageTab> {
   void _sendMessage(String message) {
     final postKey = ref.push().key;
     final refChild = ref.child("${widget.userId}/${widget.message_with_id}/$postKey");
-    Timestamp timestamp = Timestamp.now();
+
+    // Şu anki zamanı al
+    Timestamp now = Timestamp.now();
+
+    print("Timeeee: " + DateTime.fromMillisecondsSinceEpoch(1715039147 * 1000).toString());
+
     setState(() {
       refChild.set({
         "alici" : widget.message_with_id,
         "durum" : "aktif",
         "gonderen" : widget.userId,
         "mesaj" : message,
-        "tarih" : timestamp.seconds
+        "tarih" : now.seconds
       });
     });
-
-
-
-
     print('Gönderilen mesaj: $message');
   }
 
@@ -87,7 +86,6 @@ class _MessageWithState extends State<MessageTab> {
           ),
         ],
       ),
-      //child : MesajAl(userId:  widget.userId, message_with: widget.message_with_id,)
     );
   }
 }

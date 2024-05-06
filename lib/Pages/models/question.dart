@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-
 class Question{
-  final Image image;
+ 
   final String id;
 
   final String title;
@@ -12,7 +10,7 @@ class Question{
     required this.id,
     required this.title,
     required this.options,
-    required this.image
+
   });
   @override
   

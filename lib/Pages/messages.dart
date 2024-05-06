@@ -1,4 +1,5 @@
 import 'package:beslenme/Pages/message_tab.dart';
+import 'package:beslenme/Pages/screens/home_page_chat.dart';
 import 'package:beslenme/ReadData/diyetisyen_al_mesaj.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,8 @@ class _MessagesState extends State<Messages> {
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
-                icon: Text("Arkadaşlar"),
+                icon: Text("Kullanıcılar"),
+                
               ),
               Tab(
                 icon: Text("Diyetisyenler"),
@@ -49,7 +51,7 @@ class _MessagesState extends State<Messages> {
         body: TabBarView(
           children: <Widget>[
             Center(
-              child: Text("Arkadaş içeriği"),
+              child: UserListPage(),
             ),
             Center(
               child: DiyetisYenAlMesaj(userId: userId,onTap: goMessageTab)

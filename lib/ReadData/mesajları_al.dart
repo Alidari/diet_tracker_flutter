@@ -26,9 +26,7 @@ class MesajAl extends StatelessWidget {
                   Map messageList = {};
                   Map MessagesData;
 
-
-                  print(snapshot.hasData.toString());
-                  if(snapshot.hasData){
+                  if(snapshot.hasData && snapshot.data!.value != null){
                     MessagesData = snapshot.data!.value as Map;
 
 
@@ -81,8 +79,6 @@ class MesajAl extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(mesaj,style: TextStyle(color: Colors.white.withOpacity(0.9)),),
-                                Text(saat.toString() + ":" + dakika.toString(),style: TextStyle(fontSize: 10,color: Colors.white ),textAlign: TextAlign.end,),
-                                Text(tarihDate.toString(),style: TextStyle(fontSize: 10,color: Colors.white ),)
                               ],
                             ),
                           ),
@@ -94,7 +90,7 @@ class MesajAl extends StatelessWidget {
                  );
                 }
                 else{
-                  return Text("Henüz Hiç Mesaj Yok");
+                  return Center(child: Text("Henüz Hiç Mesaj Yok"));
                 }
 
                 }

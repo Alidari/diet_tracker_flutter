@@ -35,10 +35,10 @@ class _diyetisyenSecState extends State<diyetisyenSec> {
       });
     });
   }
-  void diyetisyenGoruntule(Map diyetisyen){
+  void diyetisyenGoruntule(Map diyetisyen,String diyetisyenId){
     Navigator.push(
         context,
-      MaterialPageRoute(builder: (context) => DiyetisyenSayfa(diyetisyen: diyetisyen,))
+      MaterialPageRoute(builder: (context) => DiyetisyenSayfa(diyetisyen: diyetisyen,diyetisyenID: diyetisyenId))
     );
   }
 

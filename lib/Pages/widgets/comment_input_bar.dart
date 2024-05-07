@@ -36,9 +36,6 @@ class _ChatInputState extends State<CommentInputBar> {
                       hintText: 'Diyetisyen Yorumunu...',
                       border: InputBorder.none
                   ),
-                  onTap: (){
-                    //isKeyboardVisible = true;
-                  },
                 ),
               ),
             ),

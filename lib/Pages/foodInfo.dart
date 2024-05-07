@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:js_interop';
 import 'package:beslenme/Pages/BesinDetay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,7 @@ class FoodsInfo extends StatefulWidget {
 
 class _DataListViewState extends State<FoodsInfo> {
   List<Map<String,dynamic>> dataList = [];
+  List<String> urlList = [];
   List<Map<String,dynamic>> filteredList = [];
   int itemCount = 0;
   bool isLoading = false;
@@ -38,17 +41,20 @@ class _DataListViewState extends State<FoodsInfo> {
   }
 
   Future<void> loadData() async {
-    print("Before: " + isLoading.toString());
 
     if(!isLoading) {
       setState(() {
         isLoading = true;
         itemCount+=100;
       });
-      print("After: " + isLoading.toString());
+
 
       String jsonData = await rootBundle.loadString('assets/data.json');
       List<dynamic> jsonList = json.decode(jsonData);
+
+      String urls = "assets/urls.txt";
+      String data = await rootBundle.loadString(urls);
+      urlList = data.split('\n');
 
       await Future.delayed(Duration(milliseconds: 500));
 
@@ -110,6 +116,8 @@ class _DataListViewState extends State<FoodsInfo> {
           itemBuilder: (context, index) {
             if(index < filteredList.length){
               var item = filteredList[index];
+              var url = urlList[index*2];
+              var altarnativeUrl = urlList[index*2 +1];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0,vertical: 2),
                 child: Container(
@@ -126,37 +134,37 @@ class _DataListViewState extends State<FoodsInfo> {
                   ),
                   child: GestureDetector(
                     onTap: (){
-
+                      print("LİSTE DEDECTOR: " + urlList.toString());
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => FoodDetails(
-                            foodName: item["foodname"], energy: double.tryParse(item["_208 Energy (kcal)"].toString()), carbohydrate: double.tryParse(item["_205 Carbohydrate (g)"].toString()),
-                            protein: double.tryParse(item["_203 Protein (g)"].toString()), totalFat: double.tryParse(item["_204 Total Fat (g)"].toString()), water: double.tryParse(item["_255 Water (g)"].toString()),
-                            sugars: double.tryParse(item["_269 Sugars, total (g)"].toString()), calcium: double.tryParse(item["301 Calcium (mg)"].toString()), iron: double.tryParse(item["_303 Iron (mg)"].toString()),
-                            magnesium: double.tryParse(item["_304 Magnesium (mg)"].toString()), potassium: double.tryParse(item["_306 Potassium (mg)"].toString()), sodium: double.tryParse(item["_307 Sodium (mg)"].toString())
+                            foodName: item["foodname"], energy: double.tryParse(item["Energy"].toString()), carbohydrate: double.tryParse(item["Carbohydrate"].toString()),
+                            protein: double.tryParse(item["Protein"].toString()), totalFat: double.tryParse(item["Total Fat"].toString()), water: double.tryParse(item["Water"].toString()),
+                            sugars: double.tryParse(item["Sugars"].toString()), calcium: double.tryParse(item["Calcium"].toString()), iron: double.tryParse(item["Iron"].toString()),
+                            magnesium: double.tryParse(item["Magnesium"].toString()), potassium: double.tryParse(item["Potassium"].toString()), sodium: double.tryParse(item["Sodium"].toString()), url: url,altUrl : altarnativeUrl,
                         )
                         ),
 
-                         /* "\"ID\"": 1,
-                          "foodname": "Süt, bütün, düşük sodyumlu",
-                          "_208 Energy (kcal)": 61,
-                          "_205 Carbohydrate (g)": 4.4599,
-                          "_203 Protein (g)": 3.1,
-                          "_204 Total Fat (g)": 3.4599,
-                          "_255 Water (g)": 88.2,
-                          "_269 Sugars, total (g)": 4.4599,
-                          "_301 Calcium (mg)": 101,
-                          "_303 Iron (mg)": 0.05,
-                          "_304 Magnesium (mg)": 5,
-                          "_306 Potassium (mg)": 253,
-                          "_307 Sodium (mg)": 3*/
+                         /*   "ID": 0,
+                            "foodname": "Süt, bütün",
+                            "Energy": 61,
+                            "Carbohydrate": 4.7999,
+                            "Protein": 3.1499,
+                            "Total Fat": 3.25,
+                            "Water": 88.1299,
+                            "Sugars, total": 5.0499,
+                            "Calcium": 113,
+                            "Iron": 0.03,
+                            "Magnesium": 10,
+                            "Potassium": 132,
+                            "Sodium": 43*/
 
                       );
                     },
                     child:
                         ListTile(
                         title: Text(item["foodname"]),
-                        subtitle: Text('Kalorisi: ${item["_208 Energy (kcal)"]}'),
+                        subtitle: Text('Kalorisi: ${item["Energy"]} kcal'),
                         ),
                   ),
                 ),

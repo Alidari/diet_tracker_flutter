@@ -31,7 +31,7 @@ class GetUserName extends StatelessWidget {
             return Text("Bilinmiyor");
           }
         }
-        return Text("Yükleniyor...");
+        return Text("-");
       }
       ),
     );

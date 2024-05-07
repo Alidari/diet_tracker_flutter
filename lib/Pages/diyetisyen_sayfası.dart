@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:beslenme/Pages/widgets/comment_input_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -9,8 +7,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class DiyetisyenSayfa extends StatefulWidget {
   final Map diyetisyen;
+  final String diyetisyenID;
 
-  const DiyetisyenSayfa({Key? key,required this.diyetisyen,}) : super(key: key);
+  const DiyetisyenSayfa({Key? key,required this.diyetisyen,required this.diyetisyenID}) : super(key: key);
 
   @override
   State<DiyetisyenSayfa> createState() => _DiyetisyenSayfaState();
@@ -20,10 +19,13 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
   int starControl = 0;
   String kullaniciAdi = '';
 
-  final ref = FirebaseDatabase.instance.ref("reviews");
+  final refReview = FirebaseDatabase.instance.ref("reviews");
+  final refUser = FirebaseDatabase.instance.ref("users");
+  final refRelation = FirebaseDatabase.instance.ref("relationships");
+
   final user = FirebaseAuth.instance.currentUser!;
   late final String userId;
-
+  late final userName;
   @override
   void initState() {
     userId = user.uid;
@@ -31,7 +33,50 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
     super.initState();
   }
 
-  void _fetchKullaniciAdi(){
+  void _diyetisyenIptal(){
+    refRelation.child(widget.diyetisyenID).child(userId).remove();
+    setState(() {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    });
+  }
+
+  void _fetchKullaniciAdi() async {
+
+    refUser.child(userId).get().then((value) {
+      Map data = value.value as Map;
+      userName = data["name"];
+    }
+    );
+  }
+
+  void _showDialog(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Emin misiniz?'),
+          content: Text('Üyeliğinizi iptal etmek istediğinizden emin misiniz?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Hayır'),
+            ),
+            TextButton(
+              onPressed: () {
+                _diyetisyenIptal();
+                //Navigator.of(context).pop();
+                build(context);
+              },
+              child: Text('Evet'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -40,12 +85,17 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
     double screenWidth = MediaQuery.of(context).size.width;
     TextEditingController _controller = TextEditingController();
 
-    void sendRating(String rating){
-      ref.child(widget.diyetisyen["id"]).update({
-        "Doktor" : widget.diyetisyen["id"].toString(),
-        "Hasta" : ""
+    void sendRating(String yorum){
+
+     refReview.child(widget.diyetisyenID).child(userId).update({
+        "Doktor" : widget.diyetisyenID.toString(),
+        "Hasta" : userName.toString(),
+        "Yorum" : yorum.toString(),
+        "Puan" : starControl.toString()
       });
     }
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -58,17 +108,21 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
             child: Column(
               children: [
                 Container(
-        
-                  width: 70,
-                  height: 70,
-                  margin: EdgeInsets.all(35),
+                  width: 100,
+                  height: 100,
+                  margin: EdgeInsets.symmetric(vertical: 50),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/profil.jpg"),
-                    ),
                   ),
+                  child: ClipRRect(
+                    child: Image.memory(
+                      widget.diyetisyen["base64resim"],
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(70/2),
+
+                  ),
+
                 ),
                 Text("Diyetisyen Dr." + widget.diyetisyen["ad"] + " " + widget.diyetisyen["soyad"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),textAlign: TextAlign.center,),
                 Text("Tel No: +90 " + widget.diyetisyen["telefon"]),
@@ -149,17 +203,30 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
                               ),
                               SizedBox(height: 15,),
                               
-                              CommentInputBar(textEditingController: _controller, onSendMessage: sendRating)
+                              CommentInputBar(textEditingController: _controller, onSendMessage: sendRating),
 
                             ],
                           ),
                        ),
+
+
         
                     ],
                   ),
                 ),
                 SizedBox(height: 20), // Araya bir boşluk ekleyelim
+                GestureDetector(
+                  onTap: _showDialog,
+                  child: Container(
 
+                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.red[300],
+                      borderRadius: BorderRadius.circular(12)
+                    ),
+                    child: Text("Üyeliğini İptal Et"),
+                  ),
+                )
 
               ],
             ),

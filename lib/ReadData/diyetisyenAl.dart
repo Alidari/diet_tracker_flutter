@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -6,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 class DiyetisYenAl extends StatelessWidget {
   final String userId;
   final String kosul;
-  final Function(Map) onTap;
+  final Function(Map,String) onTap;
   final Function (String) onTapMevcutDegil;
 
   DiyetisYenAl({required this.userId,required this.kosul,required this.onTap,required this.onTapMevcutDegil});
@@ -47,6 +50,7 @@ class DiyetisYenAl extends StatelessWidget {
           List<dynamic> diyetisyenlerMevcut = [];
           List<dynamic> mevcutOlmayandiyetisyenler = [];
           List<String> mevcutOlmayanKey = [];
+          Map puanTable = {};
           List<String> mevcutKey = [];
           Map diyetisyen = snapshot.data!.value as Map;
 
@@ -54,12 +58,18 @@ class DiyetisYenAl extends StatelessWidget {
           //MEVCUT OLMAYAN DİYETİSYEN ATAMASI
           diyetisyen.forEach((key, value) {
 
+            try {
+              Uint8List bytes = base64Decode(value["base64resim"]);
+              value["base64resim"] = bytes;
+            }
+            catch(e){
+              print(key + "için hata!! " + e.toString());
+            }
 
             int control = 0;
               mevcutDiyetisyenKontrol.forEach((element) {
 
                 if(element == key) control = 1;
-                print("AŞAMA: $i , Kontrol edilen elemanlar a:$element b:$key, kontrol değişkeni: $control");
                 i++;
               });
               if(control != 1){
@@ -67,13 +77,40 @@ class DiyetisYenAl extends StatelessWidget {
                 mevcutOlmayanKey.add(key);
               }
               else{
-                print("KONTROL DEĞİŞKENİ 1 OLDUĞU İÇİN $key değerli atandı");
                 diyetisyenlerMevcut.add(value);
                 mevcutKey.add(key);
               }
           });
+
+
+
+
+          //---------------PUAN TABLOSU OLAYI ---------------------------------
+          ref.child("reviews").get().then((value) {
+            Map data = value.value as Map;
+
+            data.forEach((key, value) {
+              Map data2 = value as Map;
+
+              int puan = 0;
+              int iterate = 0;
+              data2.forEach((key, value) {
+                Map review = value as Map;
+                iterate++;
+                puan += int.tryParse(review["puan"])!;
+              });
+
+              if(iterate != 0) {
+                puanTable[key] = puan / iterate;
+              }
+            });
+
+          });
+          //----------------------------------------------------------
+
+
+
           if(diyetisyen != null && kosul == "mevcut" && diyetisyenlerMevcut.length != 0) {
-            print("Mevcut Diyetisyenler: " + diyetisyenlerMevcut.toString());
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -90,8 +127,23 @@ class DiyetisYenAl extends StatelessWidget {
                         children: [
                           for(int i=0;i<diyetisyenlerMevcut.length;i++)
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 8),
-                              child: Icon(Icons.person,size: 20,),
+                              padding: const EdgeInsets.symmetric(vertical: 5.0,horizontal: 8),
+                              child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    ),
+                                    child: ClipRRect(
+                                      child: Image.memory(
+                                      diyetisyenlerMevcut[i]["base64resim"],
+                                      fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30/2),
+
+                                    ),
+
+                              ),
                             ),
                         ],
                       ),
@@ -124,7 +176,7 @@ class DiyetisYenAl extends StatelessWidget {
                                 height: 10,
                                 padding: EdgeInsets.all(1), // padding ayarı
                                 onPressed: (){
-                                  onTap(diyetisyenlerMevcut[i]);
+                                  onTap(diyetisyenlerMevcut[i],mevcutKey[i]);
                                 },
                                 child: Text("Detay",style: TextStyle(fontSize: 15),),
                                 color: Colors.green,
@@ -140,7 +192,6 @@ class DiyetisYenAl extends StatelessWidget {
             );
           }
           else if(diyetisyen != null && kosul == "mevcut degil" && mevcutOlmayandiyetisyenler.length != 0){
-            print("Mevcut Olmayan Diyetisyenler: " + mevcutOlmayandiyetisyenler.toString());
             return Container(
               margin: EdgeInsets.all(0),
               decoration: BoxDecoration(
@@ -154,8 +205,23 @@ class DiyetisYenAl extends StatelessWidget {
                     children: [
                       for(int i=0;i<mevcutOlmayandiyetisyenler.length;i++)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 8),
-                          child: Icon(Icons.person),
+                          padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 8),
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipRRect(
+                              child: Image.memory(
+                                mevcutOlmayandiyetisyenler[i]["base64resim"],
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(30/2),
+
+                            ),
+
+                          ),
                         ),
                     ],
                   ),

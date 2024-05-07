@@ -47,41 +47,45 @@ Widget build(BuildContext context) {
           Expanded(
             child: _buildMessageList(),
           ),
-          _buildMessageInput(),
+          
         ],
       ),
     ),
   );
 }
 
-Widget _buildMessageList() {
-  return StreamBuilder<DatabaseEvent>(
+ Widget _buildMessageList() {
+  return StreamBuilder<List<Map<String, dynamic>>>(
     stream: _chatService.getMessages(
       widget.receiverID,
       _firebaseAuth.currentUser!.uid,
     ),
     builder: (context, snapshot) {
       if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
+        return Text('Hata: ${snapshot.error}');
       }
       if (snapshot.connectionState == ConnectionState.waiting) {
         return Center(child: CircularProgressIndicator());
       }
       List<Widget> messageWidgets = [];
-      Map<dynamic, dynamic>? values =
-          (snapshot.data?.snapshot.value as Map<dynamic, dynamic>?);
-      if (values != null) {
-        // Mesajları ters sırala
-        var sortedValues = values.values.toList().reversed.toList();
-        sortedValues.forEach((value) {
-          messageWidgets.add(_buildMessageItem(value));
+      List<Map<String, dynamic>>? messages = snapshot.data;
+      if (messages != null) {
+        // Mesajları tarih damgasına göre sırala
+        messages.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
+        messages.forEach((message) {
+          messageWidgets.add(_buildMessageItem(message));
         });
       }
-      return Expanded(
-        child: ListView(
-          reverse: true, // ListView'ı tersine çevirme
-          children: messageWidgets,
-        ),
+      return Column(
+        children: [
+          Expanded(
+            child: ListView(
+              reverse: true, // ListView'ı tersine çevirme
+              children: messageWidgets,
+            ),
+          ),
+          _buildMessageInput(), // Yeni metin giriş alanı
+        ],
       );
     },
   );
@@ -104,13 +108,7 @@ Widget _buildMessageItem(Map<dynamic, dynamic> data) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            data['senderEmail'] ?? '',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isCurrentUser ? Colors.white : Colors.black,
-            ),
-          ),
+          
           SizedBox(height: 4.0),
           ChatBubble(message: data['message'] ?? ''),
         ],

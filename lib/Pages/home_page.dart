@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/Pages/messages.dart';
 import 'package:beslenme/Pages/screens/Start.dart';
@@ -21,13 +20,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
-
+    int _selectedIndex = 0;
   late String docId;
 
   Future getDocId() async {
     docId = user.uid;
   }
-
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    switch (_selectedIndex) {
+      case 0:
+        // İlk öğeye tıklandığında yapılacak işlemler
+        break;
+      case 1:
+        // İkinci öğeye tıklandığında yapılacak işlemler
+        break;
+      case 2:
+        // Üçüncü öğeye tıklandığında Guncelle.dart sayfasına geçiş yapılacak
+       
+        break;
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -62,6 +77,9 @@ class _HomePageState extends State<HomePage> {
             label: "",
           ),
         ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: _onItemTapped,
         ),
         body: Container(
           decoration: BoxDecoration(

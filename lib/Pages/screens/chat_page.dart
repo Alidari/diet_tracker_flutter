@@ -37,11 +37,11 @@ class _ChatPageState extends State<ChatPage> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[150],
       title: Text(widget.receiverUserName),
     ),
     body: Container(
-      color: Colors.lightGreen[400], // Arka plan rengi
+      color: const Color.fromARGB(255, 255, 255, 255), // Arka plan rengi
       child: Column(
         children: [
           Expanded(
@@ -102,7 +102,7 @@ Widget _buildMessageItem(Map<dynamic, dynamic> data) {
       margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
       padding: EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: isCurrentUser ? Colors.blue : Colors.grey[300],
+        color: isCurrentUser ? Colors.green : Colors.grey[300],
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
@@ -139,7 +139,7 @@ Widget _buildMessageInput() {
         IconButton(
           onPressed: sendMessage,
           icon: Icon(Icons.send),
-          color: Colors.blue,
+          color: Colors.lightGreen[400],
           iconSize: 32.0,
         ),
       ],

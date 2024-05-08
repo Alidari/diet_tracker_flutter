@@ -302,7 +302,7 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                               // Skor kısmı burada ekleniyor
-                                              Container(
+                                             /* Container(
                                                 width: screenWidth / 5,
                                                 height: 80,
                                                 decoration: BoxDecoration(
@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                                                     )
                                                   ],
                                                 ),
-                                              ),
+                                              ),*/
                                             ],
                                           ),
                                         ),

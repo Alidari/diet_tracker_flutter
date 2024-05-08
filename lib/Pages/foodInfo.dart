@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:js_interop';
 import 'package:beslenme/Pages/BesinDetay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,4 +1,5 @@
 import 'package:beslenme/Pages/widgets/comment_input_bar.dart';
+import 'package:beslenme/ReadData/diyetisyen_yorumlar%C4%B1_al.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -86,13 +87,15 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
     TextEditingController _controller = TextEditingController();
 
     void sendRating(String yorum){
-
-     refReview.child(widget.diyetisyenID).child(userId).update({
+    setState(() {
+      refReview.child(widget.diyetisyenID).child(userId).update({
         "Doktor" : widget.diyetisyenID.toString(),
         "Hasta" : userName.toString(),
         "Yorum" : yorum.toString(),
         "Puan" : starControl.toString()
       });
+    });
+
     }
 
 
@@ -226,7 +229,13 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
                     ),
                     child: Text("Üyeliğini İptal Et"),
                   ),
-                )
+                ),
+
+
+                SizedBox(height: 40,),
+                DiyetisyenYorumAl(diyetisyenId: widget.diyetisyenID),
+
+
 
               ],
             ),

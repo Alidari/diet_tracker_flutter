@@ -1,9 +1,21 @@
+import 'package:beslenme/ReadData/get_user_names.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:beslenme/Pages/screens/Quizz.dart';
 
+// ignore: must_be_immutable
 class StartScreen extends StatelessWidget {
+
+  final user = FirebaseAuth.instance.currentUser!;
+  late String docId;
+
+  StartScreen({super.key});
+  Future getDocId() async {
+    docId = user.uid;
+  }
   @override
   Widget build(BuildContext context) {
+     getDocId(); 
     return Scaffold(
       appBar: AppBar(
         title: Text('Quiz Bilgilendirilmesi'),
@@ -37,6 +49,35 @@ class StartScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 18.0),
                     textAlign: TextAlign.center,
                   ),
+                ),
+                SizedBox(height: 20.0),
+                 Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: BorderRadius.circular(10.0),
+                  
+                  ),
+                  
+                  child:  const Text('En güncel skorunuz:', style: TextStyle(fontSize: 18.0)),
+
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: BorderRadius.circular(10.0),
+                  
+                  ),
+                  
+                  child:  GetUserName(documentId: docId,feature: 'score',styl: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black.withOpacity(0.7),
+                                            fontSize: 25,
+                                            fontFamily: "Arial"
+                                        ))
+
                 ),
                 SizedBox(height: 40.0),
                 ElevatedButton(

@@ -217,6 +217,11 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
                     ],
                   ),
                 ),
+
+
+
+                SizedBox(height: 20,),
+                DiyetisyenYorumAl(diyetisyenId: widget.diyetisyenID),
                 SizedBox(height: 20), // Araya bir boşluk ekleyelim
                 GestureDetector(
                   onTap: _showDialog,
@@ -224,16 +229,13 @@ class _DiyetisyenSayfaState extends State<DiyetisyenSayfa> {
 
                     padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.red[300],
-                      borderRadius: BorderRadius.circular(12)
+                        color: Colors.red[300],
+                        borderRadius: BorderRadius.circular(12)
                     ),
                     child: Text("Üyeliğini İptal Et"),
                   ),
                 ),
-
-
-                SizedBox(height: 40,),
-                DiyetisyenYorumAl(diyetisyenId: widget.diyetisyenID),
+                SizedBox(height: 20),
 
 
 

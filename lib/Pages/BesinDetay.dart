@@ -48,7 +48,7 @@ class FoodDetails extends StatelessWidget {
         Row(
           children: [
             Container(
-              width: 200,
+              constraints: BoxConstraints(maxWidth: 180,maxHeight: 180,minHeight: 180,minWidth: 180), // Maksimum genişlik 300 piksel olarak ayarlanıyor
               child: Image.network(
                 url,
                 loadingBuilder: (context, child, loadingProgress){

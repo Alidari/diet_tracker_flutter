@@ -58,9 +58,6 @@ class MesajAl extends StatelessWidget {
                     var alici = values[index]["alici"];
                     var gonderen = values[index]["gonderen"];
                     var tarih = values[index]["tarih"];
-                    var saat = DateTime.fromMillisecondsSinceEpoch(tarih * 1000).hour;
-                    var dakika = DateTime.fromMillisecondsSinceEpoch(tarih * 1000).minute;
-                    var tarihDate = DateTime.fromMillisecondsSinceEpoch(tarih * 1000);
 
                     return Row(
                       mainAxisAlignment: (gonderen == userId) ? MainAxisAlignment.end : MainAxisAlignment.start ,

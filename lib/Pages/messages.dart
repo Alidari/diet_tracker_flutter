@@ -1,8 +1,9 @@
-import 'package:beslenme/Pages/message_tab.dart';
 import 'package:beslenme/Pages/screens/home_page_chat.dart';
 import 'package:beslenme/ReadData/diyetisyen_al_mesaj.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'message_tab2.dart';
 
 class Messages extends StatefulWidget {
   const Messages({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _MessagesState extends State<Messages> {
   void goMessageTab(String messageWithId,String messageWithName,String messageWithSurname){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MessageTab(message_with_id: messageWithId, userId: userId, other_name: messageWithName, other_surname: messageWithSurname,)), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+      MaterialPageRoute(builder: (context) => MessageTab2(message_with_id: messageWithId, userId: userId, other_name: messageWithName, other_surname: messageWithSurname,)), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
     );
  }
 

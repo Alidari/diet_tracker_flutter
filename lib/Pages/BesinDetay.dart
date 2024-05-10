@@ -1,7 +1,8 @@
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 
-
-class FoodDetails extends StatelessWidget {
+class FoodDetails extends StatefulWidget {
   final String foodName;
   final double? energy;
   final double? carbohydrate;
@@ -22,141 +23,365 @@ class FoodDetails extends StatelessWidget {
     ,required this.water,required this.sugars,required this.calcium,required this.iron,required this.magnesium,
     required this.potassium, required this.sodium,required this.url,required this.altUrl
   }) : super(key: key);
+  @override
+  State<FoodDetails> createState() => _FoodDetailsState();
+}
+
+class _FoodDetailsState extends State<FoodDetails> {
+
+
+  List<String> optionsPorsiyon = ['Büyük', 'Orta', 'Küçük'];
+  String selectedOptionPorsiyon = 'Orta';
+  int selectedPorsiyonIndex = 2;
+
+  List<String> optionNumber = ["1","2","3","4","5","6","7","8","9"];
+  String selectedOptionNumber = "1";
+
+  double carpan = 1;
+
 
   @override
   Widget build(BuildContext context) {
+    final double total = widget.carbohydrate! + widget.totalFat!+ widget.protein!;
+    final double percentCar = widget.carbohydrate!/total * 100 ;
+    final double percentFat = widget.totalFat!/total * 100 ;
+    final double percentPro = widget.protein!/total * 100 ;
 
-    final double total = carbohydrate! + totalFat!+ protein!;
 
-    final double percentCar = carbohydrate!/total * 100 ;
-    final double percentFat = totalFat!/total * 100 ;
-    final double percentPro = protein!/total * 100 ;
+    double screenWidth = MediaQuery.of(context).size.width;
 
-    String selectedOptionPorsiyon = 'Porsiyon (Orta)'; // Başlangıçta orta seçeneği seçili
-    List<String> optionsPorsiyon = ['Porsiyon (Büyük)', 'Porsiyon (Orta)', 'Porsiyon (Küçük)']; // Seçenekler listesi
+    void changeportion(String newValue){
+      setState(() {
+        selectedOptionPorsiyon = newValue;
+        switch(newValue){
+          case "Büyük":
+            carpan *= 4/selectedPorsiyonIndex;
+            selectedPorsiyonIndex = 4;
+            break;
+          case "Orta" :
+        carpan *= 2/selectedPorsiyonIndex;
+        selectedPorsiyonIndex = 2;
+            break;
+          case "Küçük":
+        carpan *= 1/selectedPorsiyonIndex;
+        selectedPorsiyonIndex = 1;
+            break;
+        }
 
+      });
+    }
+
+    void changeNumber(String newValue){
+      setState(() {
+
+        for(int i = 1;i<10;i++){
+          if(i == int.parse(newValue)){
+            carpan *= i/(int.parse(selectedOptionNumber));
+            selectedOptionNumber = newValue;
+            break;
+          }
+        }
+
+      });
+    }
 
 
     return Scaffold(appBar:
     AppBar(
-      title: Text(foodName),
+      title: Text(widget.foodName),
 
     ),
-    body:Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
+      body:Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              constraints: BoxConstraints(maxWidth: 180,maxHeight: 180,minHeight: 180,minWidth: 180), // Maksimum genişlik 300 piksel olarak ayarlanıyor
-              child: Image.network(
-                url,
-                loadingBuilder: (context, child, loadingProgress){
-                  if (loadingProgress == null) return child;
-                  if(loadingProgress.cumulativeBytesLoaded == 0){
-                    return CircularProgressIndicator(); // Yükleme sırasında gösterilecek ilerleme çubuğu
-                  }
-                  else{
-                    return Image.network(
-                      altUrl,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child; // Yükleme tamamlandıysa resmi göster
-                        return CircularProgressIndicator(); // Alternatif URL yükleme sırasında gösterilecek ilerleme çubuğu
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        // Alternatif URL yüklenirken hata olursa
-                        return Text('Resim yüklenirken bir hata oluştu: $error');
-                      },
-
-                    );
-
-                  }
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  // Alternatif URL yüklenirken hata olursa
-                  return Text('Resim yüklenirken bir hata oluştu: $error');
-                },
-              ),
-            ),
-            Column(
+            Row(
               children: [
+
                 Container(
-                  padding: EdgeInsets.all(5),
-                  width: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all()
-                  ),
-                  child: DropdownButton<String>(
-                    value: selectedOptionPorsiyon,
-                    onChanged: (String? newValue){
-                      selectedOptionPorsiyon = newValue!;
+                  margin: EdgeInsets.only(left: 20),
+                  constraints: BoxConstraints(maxWidth: 180,maxHeight: 180,minHeight: 180,minWidth: 150), // Maksimum genişlik 300 piksel olarak ayarlanıyor
+                  child: Image.network(
+                    widget.url,
+                    loadingBuilder: (context, child, loadingProgress){
+                      if (loadingProgress == null) return child;
+                      if(loadingProgress.cumulativeBytesLoaded == 0){
+                        return CircularProgressIndicator(); // Yükleme sırasında gösterilecek ilerleme çubuğu
+                      }
+                      else{
+                        return Image.network(
+                          widget.altUrl,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child; // Yükleme tamamlandıysa resmi göster
+                            return CircularProgressIndicator(); // Alternatif URL yükleme sırasında gösterilecek ilerleme çubuğu
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            print('Resim yüklenirken bir hata oluştu: $error');
+                            // Alternatif URL yüklenirken hata olursa
+                            return Image.asset("assets/dietLogo.png");
+
+                          },
+
+                        );
+
+                      }
                     },
-                    items: optionsPorsiyon.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                    errorBuilder: (context, error, stackTrace) {
+                      // Alternatif URL yüklenirken hata olursa
+                      print('Resim yüklenirken bir hata oluştu: $error');
+                      // Alternatif URL yüklenirken hata olursa
+                      return Image.asset("assets/dietLogo.png");
+                    },
                   ),
                 ),
-                SizedBox(height: 25,),
+
+                //PORSİYON AYARLAMA DROPDOWN
                 Container(
-                  width: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all()
+                  width: screenWidth-250,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            width: 200,
+                            decoration: BoxDecoration(
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              value: selectedOptionPorsiyon.toString(),
+                              onChanged: (String? newValue){
+
+                                changeportion(newValue as String);
+
+                              },
+                              items: optionsPorsiyon.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value, style: TextStyle(decoration: TextDecoration.none)), // Altı çiziliği kaldırmak için TextDecoration.none kullanılır,
+                                );
+                              }).toList(),
+                              style: TextStyle(decoration: TextDecoration.none),
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                              ),
+                              dropdownColor: Colors.lightGreen,
+                              decoration: InputDecoration(
+                                labelText: "Porsiyon",
+                                prefixIcon: Icon(
+                                  Icons.emoji_food_beverage,
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+
+                              ),
+
+                            ),
+                          ),
+                          SizedBox(height: 25,),
+
+                          //ADET AYARLAMA
+                          Container(
+                            width: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("Adet:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  width: 75,
+                                  height: 75,
+                                  decoration: BoxDecoration(
+                                  ),
+                                  child: DropdownButtonFormField<String>(
+                                    value: selectedOptionNumber,
+                                    onChanged: (String? newValue){
+
+                                      changeNumber(newValue as String);
+
+                                    },
+                                    items: optionNumber.map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    style: TextStyle(decoration: TextDecoration.none),
+                                    icon: Icon(
+                                      Icons.arrow_drop_down,
+                                    ),
+                                    dropdownColor: Colors.lightGreen,
+                                    decoration: InputDecoration(
+                                      labelText: "",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+
+                                    ),
+
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  child: DropdownButton<String>(
-                    value: selectedOptionPorsiyon,
-                    onChanged: (String? newValue){
-                      selectedOptionPorsiyon = newValue!;
-                    },
-                    items: optionsPorsiyon.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value, style: TextStyle(decoration: TextDecoration.none)), // Altı çiziliği kaldırmak için TextDecoration.none kullanılır,
-                      );
-                    }).toList(),
-                    style: TextStyle(decoration: TextDecoration.none),
-                  ),
+                )
+              ],
+            ),
+
+            SizedBox(height: 25,),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //Karbonhidrat
+                Column(
+                  children: [
+                    Text("Karbonhidrat",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                    Text((widget.carbohydrate!*carpan).toStringAsFixed(2)),
+                    Text("%"+percentCar.toStringAsFixed(2))
+                  ],
+                ),
+                //Yağ
+                Column(
+                  children: [
+                    Text("Yağ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                    Text((widget.totalFat!*carpan).toStringAsFixed(2)),
+                    Text("%"+percentFat.toStringAsFixed(2))
+                  ],
+                ),
+
+                //Protein
+                Column(
+                  children: [
+                    Text("Protein",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                    Text((widget.protein!*carpan).toStringAsFixed(2)),
+                    Text("%"+percentPro.toStringAsFixed(2))
+                  ],
                 ),
               ],
+            ),
+
+            SizedBox(height: 50,),
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(12)
+              ),
+              child: Column(
+                children: [
+                  Text("Besin Değerleri",style: TextStyle(fontWeight: FontWeight.bold),),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text("1 Porsiyon (Orta)",style: TextStyle(color:Colors.black.withOpacity(0.7)),),
+                        ],
+                      )),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Kalori (kcal)"),
+                        Text(widget.energy!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Şeker"),
+                        Text(widget.sugars!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Kalsiyum"),
+                        Text(widget.calcium!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Sodyum (mg)"),
+                        Text(widget.sodium!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Potasyum (mg)"),
+                        Text(widget.potassium!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Demir"),
+                        Text(widget.iron!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      width: screenWidth/2+100,
+                      child: Divider()),
+                  Container(
+                    width: screenWidth/2+100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Su"),
+                        Text(widget.water!.toStringAsFixed(2))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            //Karbonhidrat
-            Column(
-              children: [
-                Text("Karbonhidrat"),
-                Text(carbohydrate.toString()),
-                Text("%"+percentCar.toStringAsFixed(2))
-              ],
-            ),
-            //Yağ
-            Column(
-              children: [
-                Text("Yağ"),
-                Text(totalFat.toString()),
-                Text("%"+percentFat.toStringAsFixed(2))
-              ],
-            ),
-
-            //Protein
-            Column(
-              children: [
-                Text("Protein"),
-                Text(protein.toString()),
-                Text("%"+percentPro.toStringAsFixed(2))
-              ],
-            ),
-          ],
-        )
-      ],
-    ) ,
+      ) ,
     );
   }
 }

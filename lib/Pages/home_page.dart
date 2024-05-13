@@ -1,12 +1,9 @@
-import 'dart:ui';
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/Pages/messages.dart';
 import 'package:beslenme/Pages/screens/Start.dart';
 import 'package:beslenme/ReadData/get_user_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -20,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
-    int _selectedIndex = 0;
+  int _selectedIndex = 0;
   late String docId;
 
   Future getDocId() async {
@@ -301,55 +298,6 @@ class _HomePageState extends State<HomePage> {
                                                   ],
                                                 ),
                                               ),
-                                              // Skor kısmı burada ekleniyor
-                                             /* Container(
-                                                width: screenWidth / 5,
-                                                height: 80,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.green[100],
-                                                    borderRadius: BorderRadius.circular(12),
-                                                    border: Border.all(color: Colors.white.withOpacity(0.5), width: 1)
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        GetUserName(
-                                                          documentId: docId,
-                                                          feature: "score",
-                                                          styl: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              color: Colors.black.withOpacity(0.7),
-                                                              fontSize: 20,
-                                                              fontFamily: "Arial"
-                                                          ),
-                                                        ),
-                                                        Text(" Puan",style: TextStyle(
-                                                            fontWeight: FontWeight.bold,
-                                                            color: Colors.black.withOpacity(0.4)
-                                                        )
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(left: 20.0),
-                                                          child: Text(
-                                                              "Quiz Skor",
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight.bold,
-                                                                  color: Colors.black.withOpacity(0.4)
-                                                              )
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),*/
                                             ],
                                           ),
                                         ),
@@ -471,7 +419,7 @@ class _HomePageState extends State<HomePage> {
                                               onTap: (){
                                                 Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context) => StartScreen()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                                  MaterialPageRoute(builder: (context) => QuizStartScreen()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
                                                 );
                                               },
                                               child : Container(

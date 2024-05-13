@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:beslenme/Pages/screens/Quizz.dart';
 
 // ignore: must_be_immutable
-class StartScreen extends StatelessWidget {
+class QuizStartScreen extends StatelessWidget {
 
   final user = FirebaseAuth.instance.currentUser!;
   late String docId;
 
-  StartScreen({super.key});
+  QuizStartScreen({super.key});
   Future getDocId() async {
     docId = user.uid;
   }
@@ -68,7 +68,7 @@ class StartScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blue[100],
                     borderRadius: BorderRadius.circular(10.0),
-                  
+
                   ),
                   
                   child:  GetUserName(documentId: docId,feature: 'score',styl: TextStyle(
@@ -84,7 +84,7 @@ class StartScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => QuizHomeScreen()),
                     );
                   },
                   child: const Text('Başla', style: TextStyle(fontSize: 18.0)),

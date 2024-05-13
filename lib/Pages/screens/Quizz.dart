@@ -10,14 +10,14 @@ import 'package:beslenme/Pages/screens/Bitis.dart';
 
 
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class QuizHomeScreen extends StatefulWidget {
+  const QuizHomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<QuizHomeScreen> {
   late List<Question> _questions;
   int _score = 0;
   int _trueScore = 0;

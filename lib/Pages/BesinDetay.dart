@@ -30,9 +30,9 @@ class FoodDetails extends StatefulWidget {
 class _FoodDetailsState extends State<FoodDetails> {
 
 
-  List<String> optionsPorsiyon = ['Büyük', 'Orta', 'Küçük'];
-  String selectedOptionPorsiyon = 'Orta';
-  int selectedPorsiyonIndex = 2;
+  List<String> optionsPortion = ['Büyük', 'Orta', 'Küçük'];
+  String selectedOptionPortion = 'Orta';
+  int selectedPortionIndex = 2;
 
   List<String> optionNumber = ["1","2","3","4","5","6","7","8","9"];
   String selectedOptionNumber = "1";
@@ -52,19 +52,19 @@ class _FoodDetailsState extends State<FoodDetails> {
 
     void changeportion(String newValue){
       setState(() {
-        selectedOptionPorsiyon = newValue;
+        selectedOptionPortion = newValue;
         switch(newValue){
           case "Büyük":
-            carpan *= 4/selectedPorsiyonIndex;
-            selectedPorsiyonIndex = 4;
+            carpan *= 4/selectedPortionIndex;
+            selectedPortionIndex = 4;
             break;
           case "Orta" :
-        carpan *= 2/selectedPorsiyonIndex;
-        selectedPorsiyonIndex = 2;
+        carpan *= 2/selectedPortionIndex;
+        selectedPortionIndex = 2;
             break;
           case "Küçük":
-        carpan *= 1/selectedPorsiyonIndex;
-        selectedPorsiyonIndex = 1;
+        carpan *= 1/selectedPortionIndex;
+        selectedPortionIndex = 1;
             break;
         }
 
@@ -150,13 +150,13 @@ class _FoodDetailsState extends State<FoodDetails> {
                             decoration: BoxDecoration(
                             ),
                             child: DropdownButtonFormField<String>(
-                              value: selectedOptionPorsiyon.toString(),
+                              value: selectedOptionPortion.toString(),
                               onChanged: (String? newValue){
 
                                 changeportion(newValue as String);
 
                               },
-                              items: optionsPorsiyon.map<DropdownMenuItem<String>>((String value) {
+                              items: optionsPortion.map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value, style: TextStyle(decoration: TextDecoration.none)), // Altı çiziliği kaldırmak için TextDecoration.none kullanılır,

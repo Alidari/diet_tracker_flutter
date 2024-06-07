@@ -46,7 +46,8 @@ dependencies:
   path_provider: ^2.0.10
   open_file: ^3.2.1
   flutter_svg:
-
+  firebase_storage: ^11.0.0
+  image_picker: ^0.8.5+3
 dev_dependencies:
   flutter_test:
     sdk: flutter

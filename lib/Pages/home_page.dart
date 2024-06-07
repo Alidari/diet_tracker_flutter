@@ -1,13 +1,16 @@
+import 'dart:io';
 import 'package:beslenme/Pages/dietList.dart';
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/Pages/messages.dart';
+import 'package:beslenme/Pages/screens/Guncelleme.dart';
 import 'package:beslenme/Pages/screens/Start.dart';
 import 'package:beslenme/ReadData/get_user_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'foodInfo.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,9 +23,34 @@ class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   int _selectedIndex = 0;
   late String docId;
-
+  String? _profileImageUrl;
   Future getDocId() async {
     docId = user.uid;
+  }
+  Future<void> _loadProfileImage() async {
+    try {
+      final ref = FirebaseStorage.instance.ref().child('profile_images').child('$docId.jpg');
+      final url = await ref.getDownloadURL();
+      setState(() {
+        _profileImageUrl = url;
+      });
+    } catch (e) {
+      print("Error loading profile image: $e");
+    }
+  }
+  Future<void> _uploadProfileImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      try {
+        final ref = FirebaseStorage.instance.ref().child('profile_images').child('$docId.jpg');
+        await ref.putFile(File(pickedFile.path));
+        _loadProfileImage();
+      } catch (e) {
+        print("Error uploading profile image: $e");
+      }
+    }
   }
   void _onItemTapped(int index) {
     setState(() {
@@ -36,8 +64,12 @@ class _HomePageState extends State<HomePage> {
         // İkinci öğeye tıklandığında yapılacak işlemler
         break;
       case 2:
-        // Üçüncü öğeye tıklandığında Guncelle.dart sayfasına geçiş yapılacak
-       
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfileScreen()),
+        );
+        break;
+      default:
         break;
     }
   }
@@ -100,15 +132,20 @@ class _HomePageState extends State<HomePage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      width: 70,
-                                      height: 70,
-                                      margin: EdgeInsets.all(35),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage("assets/profil.jpg"),
+                                    GestureDetector(
+                                      onTap: _uploadProfileImage,
+                                      child: Container(
+                                        width: 70,
+                                        height: 70,
+                                        margin: EdgeInsets.all(35),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: _profileImageUrl != null
+                                                ? NetworkImage(_profileImageUrl!)
+                                                : AssetImage("assets/defaultProfilPicture.png") as ImageProvider<Object>,
+                                          ),
                                         ),
                                       ),
                                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:beslenme/Pages/home_page.dart'; // Ana sayfa dosyanızı buraya dahil edin
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -8,7 +9,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastnameController = TextEditingController();
@@ -29,14 +29,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadUserData() async {
-    DatabaseReference userRef = FirebaseDatabase.instance.reference().child('users/$uid');
+    DatabaseReference userRef = FirebaseDatabase.instance.ref().child('users/$uid');
     DatabaseEvent userEvent = await userRef.once();
     DataSnapshot userSnapshot = userEvent.snapshot;
 
     if (userSnapshot.value != null) {
       Map<String, dynamic> userData = Map<String, dynamic>.from(userSnapshot.value as Map);
       setState(() {
-        emailController.text = userData['email'];
         nameController.text = userData['name'];
         lastnameController.text = userData['lastname'];
         weightController.text = userData['kilo'].toString();
@@ -54,9 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         double heightM = heightCm / 100.0;
         double bmi = weight / (heightM * heightM);
         String bmiString = bmi.toStringAsFixed(2);
-        DatabaseReference userRef = FirebaseDatabase.instance.reference().child('users/$uid');
+        DatabaseReference userRef = FirebaseDatabase.instance.ref().child('users/$uid');
         await userRef.update({
-          'email': emailController.text,
           'name': nameController.text,
           'lastname': lastnameController.text,
           'kilo': weight,
@@ -67,6 +65,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Bilgiler güncellendi.')),
+        );
+        // Güncelleme başarılı olduğunda ana sayfaya yönlendir
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } catch (error) {
         print('Error updating user data: $error');
@@ -107,14 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  'Bilgilerinizi güncelleyebilirsiniz:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              _buildTextField(emailController, 'Yeni Email', false),
+              
               _buildTextField(passwordController, 'Yeni Şifre', true),
               _buildTextField(nameController, 'Ad', false),
               _buildTextField(lastnameController, 'Soyad', false),
@@ -128,6 +124,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   if (passwordController.text.isNotEmpty) {
                     await _changePassword(passwordController.text);
                   }
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -149,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.6,
         decoration: BoxDecoration(
-          color: Colors.grey[200], // Açık gri rengi buradan ayarlayabilirsiniz
+          color: Colors.grey[200],
           border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(12),
         ),

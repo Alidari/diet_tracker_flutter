@@ -1,3 +1,4 @@
+import 'package:beslenme/Pages/dietList.dart';
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/Pages/messages.dart';
 import 'package:beslenme/Pages/screens/Start.dart';
@@ -473,7 +474,12 @@ class _HomePageState extends State<HomePage> {
 
                                             SizedBox(height: 40,),
                                             GestureDetector(
-                                              onTap: (){},
+                                              onTap: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => DietList()), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                                );
+                                              },
                                               child : Container(
                                                 child: Column(
                                                   children: [

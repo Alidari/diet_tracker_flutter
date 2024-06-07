@@ -1,5 +1,3 @@
-import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 
 class FoodDetails extends StatefulWidget {
@@ -92,7 +90,7 @@ class _FoodDetailsState extends State<FoodDetails> {
 
     ),
       body:Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -100,8 +98,7 @@ class _FoodDetailsState extends State<FoodDetails> {
               children: [
 
                 Container(
-                  margin: EdgeInsets.only(left: 20),
-                  constraints: BoxConstraints(maxWidth: 180,maxHeight: 180,minHeight: 180,minWidth: 150), // Maksimum genişlik 300 piksel olarak ayarlanıyor
+                  constraints: BoxConstraints(maxWidth: 150,maxHeight: 150,minHeight: 150,minWidth: 130), // Maksimum genişlik 300 piksel olarak ayarlanıyor
                   child: Image.network(
                     widget.url,
                     loadingBuilder: (context, child, loadingProgress){
@@ -138,15 +135,19 @@ class _FoodDetailsState extends State<FoodDetails> {
 
                 //PORSİYON AYARLAMA DROPDOWN
                 Container(
-                  width: screenWidth-250,
+                  width: screenWidth-170,
+                  decoration: BoxDecoration(
+                  ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
                             padding: EdgeInsets.all(5),
-                            width: 200,
+                            width: 150,
+                            height: 80,
                             decoration: BoxDecoration(
                             ),
                             child: DropdownButtonFormField<String>(
@@ -180,19 +181,20 @@ class _FoodDetailsState extends State<FoodDetails> {
 
                             ),
                           ),
-                          SizedBox(height: 25,),
+                          SizedBox(height: 0,),
 
                           //ADET AYARLAMA
                           Container(
-                            width: 200,
+                            width: 130,
+                            decoration: BoxDecoration(
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text("Adet:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
                                 Container(
                                   padding: EdgeInsets.all(5),
-                                  width: 75,
-                                  height: 75,
+                                  width: 100,
+                                  height: 70,
                                   decoration: BoxDecoration(
                                   ),
                                   child: DropdownButtonFormField<String>(
@@ -214,7 +216,7 @@ class _FoodDetailsState extends State<FoodDetails> {
                                     ),
                                     dropdownColor: Colors.lightGreen,
                                     decoration: InputDecoration(
-                                      labelText: "",
+                                      labelText: "Adet",
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10)
                                       ),

@@ -38,7 +38,7 @@ dependencies:
   firebase_core: ^2.27.0
   google_fonts:
   firebase_auth:
-  cloud_firestore:
+  cloud_firestore: ^4.10.3
   firebase_database:
   lottie:
   file_picker: ^4.6.1

@@ -11,6 +11,8 @@ import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'foodInfo.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,34 +26,61 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late String docId;
   String? _profileImageUrl;
+  @override
+
+
+
   Future getDocId() async {
     docId = user.uid;
+    await _loadProfileImage();
   }
   Future<void> _loadProfileImage() async {
     try {
-      final ref = FirebaseStorage.instance.ref().child('profile_images').child('$docId.jpg');
-      final url = await ref.getDownloadURL();
-      setState(() {
-        _profileImageUrl = url;
-      });
+      final doc = await FirebaseFirestore.instance.collection('users').doc(docId).get();
+      if (doc.exists && doc.data() != null) {
+
+          _profileImageUrl = doc.data()!['profileImageUrl'];
+
+        print("Profile image loaded: $_profileImageUrl");
+      } else {
+        setState(() {
+          _profileImageUrl = null;
+        });
+        print("No profile image found");
+      }
     } catch (e) {
       print("Error loading profile image: $e");
     }
   }
+
   Future<void> _uploadProfileImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       try {
+        print("Picked file path: ${pickedFile.path}");
         final ref = FirebaseStorage.instance.ref().child('profile_images').child('$docId.jpg');
         await ref.putFile(File(pickedFile.path));
-        _loadProfileImage();
+        final url = await ref.getDownloadURL();
+        print("Download URL: $url");
+        // Firestore'a URL'yi kaydedin ve profileImageUrl alanını ekleyin
+        await FirebaseFirestore.instance.collection('users').doc(docId).set({
+          'profileImageUrl': url,
+        }, SetOptions(merge: true));
+
+          _profileImageUrl = url;
+
+        print("Profile image updated: $_profileImageUrl");
       } catch (e) {
         print("Error uploading profile image: $e");
       }
+    } else {
+      print("No image selected");
     }
   }
+
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -144,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                                             fit: BoxFit.cover,
                                             image: _profileImageUrl != null
                                                 ? NetworkImage(_profileImageUrl!)
-                                                : AssetImage("assets/defaultProfilPicture.png") as ImageProvider<Object>,
+                                                : AssetImage("assets/profil.jpg") as ImageProvider<Object>,
                                           ),
                                         ),
                                       ),

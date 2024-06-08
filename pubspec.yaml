@@ -48,6 +48,8 @@ dependencies:
   flutter_svg:
   firebase_storage: ^11.0.0
   image_picker: ^0.8.5+3
+  google_generative_ai: ^0.4.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

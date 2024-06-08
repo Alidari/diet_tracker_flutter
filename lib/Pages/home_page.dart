@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:beslenme/Pages/ChatWithAI.dart';
 import 'package:beslenme/Pages/dietList.dart';
 import 'package:beslenme/Pages/diyetisyen_sec.dart';
 import 'package:beslenme/Pages/messages.dart';
@@ -6,13 +7,12 @@ import 'package:beslenme/Pages/screens/Guncelleme.dart';
 import 'package:beslenme/Pages/screens/Start.dart';
 import 'package:beslenme/ReadData/get_user_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:beslenme/Pages/VucutKitleIndeksi.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:image_picker/image_picker.dart';
 import 'foodInfo.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -553,6 +553,33 @@ class _HomePageState extends State<HomePage> {
                                                     Image.asset("assets/list.png",width: 90,),
                                                     SizedBox(height: 10,),
                                                     Text("Diyet Listesi",
+                                                      style: GoogleFonts.roboto(
+                                                          fontWeight : FontWeight.bold,
+                                                          fontSize : 18,
+                                                          color : Colors.black.withOpacity(0.7)
+
+                                                      ),
+                                                    ),
+
+                                                  ],
+                                                ),
+
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => ChatWithAI(userId: user.uid)), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
+                                                );
+                                              },
+                                              child : Container(
+                                                child: Column(
+                                                  children: [
+
+                                                    Image.asset("assets/list.png",width: 90,),
+                                                    SizedBox(height: 10,),
+                                                    Text("Yapay Zeka'ya Sor",
                                                       style: GoogleFonts.roboto(
                                                           fontWeight : FontWeight.bold,
                                                           fontSize : 18,

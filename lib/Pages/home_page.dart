@@ -87,11 +87,15 @@ class _HomePageState extends State<HomePage> {
     });
     switch (_selectedIndex) {
       case 0:
-        // İlk öğeye tıklandığında yapılacak işlemler
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );        break;
       case 1:
-        // İkinci öğeye tıklandığında yapılacak işlemler
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatWithAI(userId: user.uid)),
+        );        break;
       case 2:
         Navigator.push(
           context,
@@ -128,8 +132,8 @@ class _HomePageState extends State<HomePage> {
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: "",
+            icon: Icon(Icons.rocket),
+            label: "AI",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.face),
@@ -566,35 +570,6 @@ class _HomePageState extends State<HomePage> {
 
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: (){
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => ChatWithAI(userId: user.uid)), // Geçiş yapmak istediğiniz sayfayı buraya ekleyin)
-                                                );
-                                              },
-                                              child : Container(
-                                                child: Column(
-                                                  children: [
-
-                                                    Image.asset("assets/list.png",width: 90,),
-                                                    SizedBox(height: 10,),
-                                                    Text("Yapay Zeka'ya Sor",
-                                                      style: GoogleFonts.roboto(
-                                                          fontWeight : FontWeight.bold,
-                                                          fontSize : 18,
-                                                          color : Colors.black.withOpacity(0.7)
-
-                                                      ),
-                                                    ),
-
-                                                  ],
-                                                ),
-
-                                              ),
-                                            ),
-
-
                                           ],
                                         ),
 
